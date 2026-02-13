@@ -1,8 +1,8 @@
 # Optional: one Application per cluster for bootstrap resources (namespaces, RBAC, etc.).
-# Cluster list from bootstrap/cluster-list/*.yaml (name, server). Add a cluster = add bootstrap/cluster-list/<name>.yaml and bootstrap/clusters/<name>/.
+# Cluster list from bootstrap/clusters/<name>/<name>.yaml (name, server). Add a cluster = add
+# bootstrap/clusters/<name>/<name>.yaml and put manifests in bootstrap/clusters/<name>/manifest/.
 # Intended for a different project and/or sync policy than workload apps. Enable by ensuring this file
-# is under apps/appsets/ and the app-of-apps syncs that directory. Create bootstrap/clusters/<name>/
-# with manifests (e.g. kustomization or plain YAML) to deploy.
+# is under apps/appsets/ and the app-of-apps syncs that directory.
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -18,7 +18,7 @@ spec:
         revision: HEAD
         requeueAfterSeconds: 60
         files:
-          - path: "bootstrap/cluster-list/*.yaml"
+          - path: "bootstrap/clusters/*/*.yaml"
         pathParamPrefix: "clusterPath"
   template:
     metadata:
@@ -31,7 +31,7 @@ spec:
         namespace: argocd
       source:
         repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-        path: bootstrap/clusters/{{.name}}
+        path: bootstrap/clusters/{{.name}}/manifest
         targetRevision: HEAD
         directory:
           recurse: true
