@@ -21,7 +21,7 @@ spec:
         pathParamPrefix: "clusterPath"
   template:
     metadata:
-      name: 'bootstrap-{{.clusterPath.basename}}'
+      name: 'bootstrap-{{.name}}'
       namespace: argocd
     spec:
       project: default
@@ -30,7 +30,7 @@ spec:
         namespace: argocd
       source:
         repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-        path: bootstrap/clusters/{{.clusterPath.basename}}
+        path: bootstrap/clusters/{{.name}}
         targetRevision: HEAD
         directory:
           recurse: true
