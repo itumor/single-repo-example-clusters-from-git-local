@@ -1,0 +1,2 @@
+# Cluster2 overrides (ingress only)
+replicaCount: 1
