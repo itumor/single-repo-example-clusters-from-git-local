@@ -19,10 +19,9 @@ spec:
         requeueAfterSeconds: 60
         files:
           - path: "bootstrap/clusters/*/*.yaml"
-        pathParamPrefix: "clusterPath"
   template:
     metadata:
-      name: 'bootstrap-{{.name}}'
+      name: 'bootstrap-{{.path.basename}}'
       namespace: argocd
     spec:
       project: default
@@ -31,7 +30,7 @@ spec:
         namespace: argocd
       source:
         repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-        path: bootstrap/clusters/{{.name}}/manifest
+        path: bootstrap/clusters/{{.path.basename}}/manifest
         targetRevision: HEAD
         directory:
           recurse: true
