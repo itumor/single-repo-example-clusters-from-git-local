@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://git.example.com/org/gitops-repo.git
+    repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
     path: apps/appsets
     targetRevision: HEAD
     directory:

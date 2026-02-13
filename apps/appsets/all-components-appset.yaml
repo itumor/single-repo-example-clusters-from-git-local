@@ -16,14 +16,14 @@ spec:
         generators:
           # 1. Git file generator: one item per cluster from clusters/*/cluster.yaml (provides name, server)
           - git:
-              repoURL: https://git.example.com/org/gitops-repo.git
+              repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
               revision: HEAD
               files:
                 - path: "clusters/*/cluster.yaml"
               pathParamPrefix: "clusterPath"
           # 2. Git directory generator: components per cluster (path uses cluster from generator 1)
           - git:
-              repoURL: https://git.example.com/org/gitops-repo.git
+              repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
               revision: HEAD
               directories:
                 - path: "clusters/{{.clusterPath.basename}}/*"
@@ -38,13 +38,13 @@ spec:
         server: '{{.server}}'
         namespace: '{{.componentPath.basename}}'
       sources:
-        - repoURL: https://git.example.com/org/gitops-repo.git
+        - repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
           path: components/{{.componentPath.basename}}
           targetRevision: HEAD
           helm:
             valueFiles:
               - values.yaml
-        - repoURL: https://git.example.com/org/gitops-repo.git
+        - repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
           path: clusters/{{.clusterPath.basename}}/{{.componentPath.basename}}
           targetRevision: HEAD
           helm:

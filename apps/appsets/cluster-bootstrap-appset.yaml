@@ -14,7 +14,7 @@ spec:
   goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
-        repoURL: https://git.example.com/org/gitops-repo.git
+        repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
         revision: HEAD
         files:
           - path: "clusters/*/cluster.yaml"
@@ -29,7 +29,7 @@ spec:
         server: '{{.server}}'
         namespace: argocd
       source:
-        repoURL: https://git.example.com/org/gitops-repo.git
+        repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
         path: bootstrap/clusters/{{.clusterPath.basename}}
         targetRevision: HEAD
         directory:
