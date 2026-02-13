@@ -18,6 +18,7 @@ spec:
           - git:
               repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
               revision: HEAD
+              requeueAfterSeconds: 60
               files:
                 - path: "clusters/*/cluster.yaml"
               pathParamPrefix: "clusterPath"
@@ -25,6 +26,7 @@ spec:
           - git:
               repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
               revision: HEAD
+              requeueAfterSeconds: 60
               directories:
                 - path: "clusters/{{.name}}/*"
               pathParamPrefix: "componentPath"
