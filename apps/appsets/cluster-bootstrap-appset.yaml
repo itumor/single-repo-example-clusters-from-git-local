@@ -1,0 +1,42 @@
+# Optional: one Application per cluster for bootstrap resources (namespaces, RBAC, etc.).
+# Uses the same cluster list from Git (clusters/*/cluster.yaml). Add a cluster = add directory + cluster.yaml.
+# Intended for a different project and/or sync policy than workload apps. Enable by ensuring this file
+# is under apps/appsets/ and the app-of-apps syncs that directory. Create bootstrap/clusters/<name>/
+# with manifests (e.g. kustomization or plain YAML) to deploy.
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-bootstrap
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://git.example.com/org/gitops-repo.git
+        revision: HEAD
+        files:
+          - path: "clusters/*/cluster.yaml"
+        pathParamPrefix: "clusterPath"
+  template:
+    metadata:
+      name: 'bootstrap-{{.clusterPath.basename}}'
+      namespace: argocd
+    spec:
+      project: default
+      destination:
+        server: '{{.server}}'
+        namespace: argocd
+      source:
+        repoURL: https://git.example.com/org/gitops-repo.git
+        path: bootstrap/clusters/{{.clusterPath.basename}}
+        targetRevision: HEAD
+        directory:
+          recurse: true
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

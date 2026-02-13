@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: headlamp
+  labels:
+    {{- include "headlamp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "headlamp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "headlamp.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: headlamp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: http
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- if and .Values.probes .Values.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness.path | default "/" }}
+              port: {{ .Values.probes.liveness.port | default "http" }}
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds | default 10 }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds | default 10 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness.path | default "/" }}
+              port: {{ .Values.probes.readiness.port | default "http" }}
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds | default 5 }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds | default 5 }}
+          {{- end }}

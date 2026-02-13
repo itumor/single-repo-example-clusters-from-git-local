@@ -1,0 +1,5 @@
+# Cluster3 overrides (ingress disabled)
+replicaCount: 1
+ingress:
+  enabled: false
+  host: ""

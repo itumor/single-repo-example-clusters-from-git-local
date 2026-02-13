@@ -1,0 +1,58 @@
+# Cluster list from Git: each clusters/<name>/cluster.yaml defines a cluster (name, server).
+# Component list from Git: directories under clusters/<name>/* are the components to deploy.
+# Repo URL/revision (single place for generated Applications): change repoURL and targetRevision in the three source blocks below.
+# Add cluster: add clusters/<name>/cluster.yaml and clusters/<name>/<component>/ for each component.
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: all-components
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          # 1. Git file generator: one item per cluster from clusters/*/cluster.yaml (provides name, server)
+          - git:
+              repoURL: https://git.example.com/org/gitops-repo.git
+              revision: HEAD
+              files:
+                - path: "clusters/*/cluster.yaml"
+              pathParamPrefix: "clusterPath"
+          # 2. Git directory generator: components per cluster (path uses cluster from generator 1)
+          - git:
+              repoURL: https://git.example.com/org/gitops-repo.git
+              revision: HEAD
+              directories:
+                - path: "clusters/{{.clusterPath.basename}}/*"
+              pathParamPrefix: "componentPath"
+  template:
+    metadata:
+      name: '{{.componentPath.basename}}-{{.clusterPath.basename}}'
+      namespace: argocd
+    spec:
+      project: default
+      destination:
+        server: '{{.server}}'
+        namespace: '{{.componentPath.basename}}'
+      sources:
+        - repoURL: https://git.example.com/org/gitops-repo.git
+          path: components/{{.componentPath.basename}}
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+              - values.yaml
+        - repoURL: https://git.example.com/org/gitops-repo.git
+          path: clusters/{{.clusterPath.basename}}/{{.componentPath.basename}}
+          targetRevision: HEAD
+          helm:
+            valueFiles:
+              - values.yaml
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

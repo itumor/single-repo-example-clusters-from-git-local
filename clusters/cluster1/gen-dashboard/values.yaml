@@ -1,0 +1,5 @@
+# Cluster1 overrides (replicas, ingress)
+replicaCount: 2
+ingress:
+  enabled: true
+  host: gen-dashboard.cluster1.example.com

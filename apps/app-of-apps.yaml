@@ -1,0 +1,22 @@
+# Bootstrap: apply this Application once to sync all ApplicationSets from apps/appsets/.
+# TODO: set repoURL below to your actual Git repo URL.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://git.example.com/org/gitops-repo.git
+    path: apps/appsets
+    targetRevision: HEAD
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

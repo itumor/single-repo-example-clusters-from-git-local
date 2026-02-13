@@ -1,0 +1,7 @@
+apiVersion: v2
+name: gen-dashboard
+description: Gen-dashboard - minimal placeholder chart for single-repo GitOps example (replace with chart from cd-common)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+kubeVersion: ">=1.19.0"

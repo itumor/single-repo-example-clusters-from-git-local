@@ -1,0 +1,6 @@
+# Cluster1 overrides (replicas, ingress)
+replicaCount: 2
+ingress:
+  enabled: true
+  host: headlamp.cluster1.example.com
+  # className: nginx

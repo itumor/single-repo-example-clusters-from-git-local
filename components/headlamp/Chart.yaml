@@ -1,0 +1,7 @@
+apiVersion: v2
+name: headlamp
+description: Headlamp Kubernetes dashboard - minimal chart for single-repo GitOps example
+type: application
+version: 0.1.0
+appVersion: "v0.21.0"
+kubeVersion: ">=1.19.0"
