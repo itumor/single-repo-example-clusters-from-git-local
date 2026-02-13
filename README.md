@@ -61,3 +61,4 @@ components/
 ```
 
 Replace `https://git.example.com/org/gitops-repo.git` with your repo URL in the files above.
+# single-repo-example-clusters-from-git-local
