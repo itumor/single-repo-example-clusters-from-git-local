@@ -30,22 +30,22 @@ spec:
               pathParamPrefix: "componentPath"
   template:
     metadata:
-      name: '{{.componentPath.basename}}-{{.name}}'
+      name: '{{.componentPath.path.basename}}-{{.name}}'
       namespace: argocd
     spec:
       project: default
       destination:
         server: '{{.server}}'
-        namespace: '{{.componentPath.basename}}'
+        namespace: '{{.componentPath.path.basename}}'
       sources:
         - repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-          path: components/{{.componentPath.basename}}
+          path: components/{{.componentPath.path.basename}}
           targetRevision: HEAD
           helm:
             valueFiles:
               - values.yaml
         - repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-          path: clusters/{{.name}}/{{.componentPath.basename}}
+          path: clusters/{{.name}}/{{.componentPath.path.basename}}
           targetRevision: HEAD
           helm:
             valueFiles:
