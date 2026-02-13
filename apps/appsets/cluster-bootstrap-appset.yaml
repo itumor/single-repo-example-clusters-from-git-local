@@ -1,5 +1,5 @@
 # Optional: one Application per cluster for bootstrap resources (namespaces, RBAC, etc.).
-# Uses the same cluster list from Git (clusters/*/cluster.yaml). Add a cluster = add directory + cluster.yaml.
+# Cluster list from bootstrap/cluster-list/*.yaml (name, server). Add a cluster = add bootstrap/cluster-list/<name>.yaml and bootstrap/clusters/<name>/.
 # Intended for a different project and/or sync policy than workload apps. Enable by ensuring this file
 # is under apps/appsets/ and the app-of-apps syncs that directory. Create bootstrap/clusters/<name>/
 # with manifests (e.g. kustomization or plain YAML) to deploy.
@@ -18,7 +18,7 @@ spec:
         revision: HEAD
         requeueAfterSeconds: 60
         files:
-          - path: "clusters/*/cluster.yaml"
+          - path: "bootstrap/cluster-list/*.yaml"
         pathParamPrefix: "clusterPath"
   template:
     metadata:
