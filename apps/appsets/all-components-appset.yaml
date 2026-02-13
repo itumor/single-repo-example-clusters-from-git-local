@@ -26,11 +26,11 @@ spec:
               repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
               revision: HEAD
               directories:
-                - path: "clusters/{{.clusterPath.basename}}/*"
+                - path: "clusters/{{index .clusterPath.segments 1}}/*"
               pathParamPrefix: "componentPath"
   template:
     metadata:
-      name: '{{.componentPath.basename}}-{{.clusterPath.basename}}'
+      name: '{{.componentPath.basename}}-{{index .clusterPath.segments 1}}'
       namespace: argocd
     spec:
       project: default
@@ -45,7 +45,7 @@ spec:
             valueFiles:
               - values.yaml
         - repoURL: https://github.com/itumor/single-repo-example-clusters-from-git-local.git
-          path: clusters/{{.clusterPath.basename}}/{{.componentPath.basename}}
+          path: clusters/{{index .clusterPath.segments 1}}/{{.componentPath.basename}}
           targetRevision: HEAD
           helm:
             valueFiles:
